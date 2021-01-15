@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace GenericApp.Web.Data.Entities
 {
@@ -13,6 +15,16 @@ namespace GenericApp.Web.Data.Entities
 
         [Display(Name = "Bandera")]
         public string FlagImageUrl { get; set; }
+
+        public ICollection<DepartmentEntity> Departments { get; set; }
+
+        public ICollection<TeamEntity> Teams { get; set; }
+
+        [DisplayName("N° Provincias")]
+        public int DepartmentsNumber => Departments == null ? 0 : Departments.Count;
+
+        [DisplayName("N° Equipos")]
+        public int TeamsNumber => Teams == null ? 0 : Teams.Count;
 
         public string FlagImageFullPath => string.IsNullOrEmpty(FlagImageUrl)
           ? $"http://keypress.serveftp.net:88/GenericAppApi/images/Flags/noimage.png"
