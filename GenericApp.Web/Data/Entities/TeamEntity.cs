@@ -22,10 +22,10 @@ namespace GenericApp.Web.Data.Entities
 
 
         [Display(Name = "Logo")]
-        public string LogoImageUrl { get; set; }
+        public string LogoImagePath { get; set; }
 
-        public string LogoImageFullPath => string.IsNullOrEmpty(LogoImageUrl)
+        public string LogoImageFullPath => string.IsNullOrEmpty(LogoImagePath)
           ? $"http://keypress.serveftp.net:88/GenericAppApi/images/Logos/noimage.png"
-          : $"http://keypress.serveftp.net:88/GenericAppApi{LogoImageUrl.Substring(1)}";
+          : $"http://keypress.serveftp.net:88/GenericAppApi{LogoImagePath.Substring(1)}";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GenericApp.Web.Data;
+using GenericApp.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using GenericApp.Web.Data;
 
 namespace GenericApp.Web
 {
@@ -30,7 +32,11 @@ namespace GenericApp.Web
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            
+            services.AddTransient<SeedDb>();
+            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

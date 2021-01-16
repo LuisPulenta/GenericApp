@@ -14,7 +14,7 @@ namespace GenericApp.Web.Data.Entities
         public string Name { get; set; }
 
         [Display(Name = "Bandera")]
-        public string FlagImageUrl { get; set; }
+        public string FlagImagePath { get; set; }
 
         public ICollection<DepartmentEntity> Departments { get; set; }
 
@@ -26,8 +26,8 @@ namespace GenericApp.Web.Data.Entities
         [DisplayName("N° Equipos")]
         public int TeamsNumber => Teams == null ? 0 : Teams.Count;
 
-        public string FlagImageFullPath => string.IsNullOrEmpty(FlagImageUrl)
+        public string FlagImageFullPath => string.IsNullOrEmpty(FlagImagePath)
           ? $"http://keypress.serveftp.net:88/GenericAppApi/images/Flags/noimage.png"
-          : $"http://keypress.serveftp.net:88/GenericAppApi{FlagImageUrl.Substring(1)}";
+          : $"http://keypress.serveftp.net:88/GenericAppApi{FlagImagePath.Substring(1)}";
     }
 }

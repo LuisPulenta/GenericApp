@@ -9,14 +9,21 @@ namespace GenericApp.Web.Data
         {
         }
 
+        public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<CityEntity> Cities { get; set; }
         public DbSet<CountryEntity> Countries { get; set; }
         public DbSet<DepartmentEntity> Departments { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<ProductImageEntity> ProductImages { get; set; }
         public DbSet<TeamEntity> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CategoryEntity>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
 
             modelBuilder.Entity<CountryEntity>()
                 .HasIndex(t => t.Name)
@@ -27,6 +34,10 @@ namespace GenericApp.Web.Data
                 dep.HasIndex("Name", "CountryId").IsUnique();
                 dep.HasOne(d => d.Country).WithMany(c => c.Departments).OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<ProductEntity>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
 
             modelBuilder.Entity<CityEntity>(cit =>
             {
