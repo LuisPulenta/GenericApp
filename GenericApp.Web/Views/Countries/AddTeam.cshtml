@@ -1,4 +1,4 @@
-﻿@model GenericApp.Web.Data.Entities.TeamEntity
+﻿@model GenericApp.Web.Models.TeamViewModel
 
 @{
     ViewData["Title"] = "Add Team";
@@ -10,18 +10,20 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddTeam">
+        
+        <form asp-action="AddTeam" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CountryId" />
             <input type="hidden" asp-for="IdCountry" />
 
             <partial name="_Team" />
 
             <div class="form-group">
                 <input type="submit" value="Grabar" class="btn btn-primary" />
-                <a asp-action="Details" asp-route-id="@Model.IdCountry" class="btn btn-success">Regresar</a>
+                <a asp-action="Details" asp-route-id="@Model.CountryId" class="btn btn-success">Regresar</a>
             </div>
         </form>
-    </div>
+</div>
 </div>
 
 @section Scripts {

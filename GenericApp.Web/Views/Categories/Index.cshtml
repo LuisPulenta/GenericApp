@@ -4,7 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Categorías</h2>
+<h2><img src="/images/Categories/categorias.jpg" alt="Image" style="width:70;height:70px;max-height: 100%; width: auto;" />
+    Categorías</h2>
 <flash dismissable="true" />
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear Nueva Categoría</a>
@@ -42,9 +43,8 @@
 
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
-
-                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog">Borrar</button>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                    <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                 </td>
             </tr>
         }

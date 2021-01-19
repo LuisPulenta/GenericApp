@@ -82,5 +82,53 @@ namespace GenericApp.Web.Helpers
                 ProductImages = product.ProductImages,
             };
         }
+
+        public CountryEntity ToCountryEntity(CountryViewModel model, string path, bool isNew)
+        {
+            return new CountryEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                FlagImagePath = path,
+                Name = model.Name
+            };
+        }
+
+        public CountryViewModel ToCountryViewModel(CountryEntity countryEntity)
+        {
+            return new CountryViewModel
+            {
+                Id = countryEntity.Id,
+                FlagImagePath= countryEntity.FlagImagePath,
+                Name = countryEntity.Name
+            };
+        }
+
+        
+
+        public TeamEntity ToTeamEntity(TeamViewModel model, string path, bool isNew)
+        {
+            return new TeamEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                LogoImagePath = path,
+                Name = model.Name,
+                IdCountry=model.IdCountry,
+                Country = model.Country,
+            };
+        }
+
+       
+        public TeamViewModel ToTeamViewModel(TeamEntity team)
+        {
+            return new TeamViewModel
+            {
+                Countries = _combosHelper.GetComboCountries(),
+                Country= team.Country,
+                CountryId=team.Country.Id,
+                Id = team.Id,
+                Name = team.Name,
+                LogoImagePath=team.LogoImagePath,
+            };
+        }
     }
 }

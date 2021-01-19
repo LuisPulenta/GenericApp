@@ -4,11 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
+<h2>
+    <img src="/images/Products/productos.jpg" alt="Image" style="width:70;height:70px;max-height: 100%; width: auto;" />
+    Productos
+</h2>
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 <br />
 
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add New</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Agregar Nuevo Producto</a>
 </p>
 
 <div class="row">
@@ -50,7 +55,7 @@
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    <img src="@item.ImageFullPath" style="width:100px;height:100px;max-width: 100%; height: auto;" />
+                                    <img src="@item.ImageFullPath" style="width:70px;height:70px;max-width: 100%; height: auto;" />
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Price)

@@ -1,5 +1,7 @@
 ﻿using GenericApp.Web.Data;
 using GenericApp.Web.Data.Entities;
+using GenericApp.Web.Helpers;
+using GenericApp.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +13,16 @@ namespace GenericApp.Web.Controllers
     public class CountriesController : Controller
     {
         private readonly DataContext _context;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public CountriesController(DataContext context)
+        public CountriesController(DataContext context,
+            IImageHelper imageHelper,
+            IConverterHelper converterHelper)
         {
             _context = context;
+            _imageHelper = imageHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Countries
@@ -56,13 +64,21 @@ namespace GenericApp.Web.Controllers
         // POST: Countries/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CountryEntity country)
+        public async Task<IActionResult> Create(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var path = string.Empty;
+
+                if (model.ImageFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Flags");
+                }
+
+                var country = _converterHelper.ToCountryEntity(model, path, true);
+                _context.Add(country);
                 try
                 {
-                    _context.Add(country);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -77,14 +93,9 @@ namespace GenericApp.Web.Controllers
                         ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                     }
                 }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                }
             }
-            return View(country);
+            return View(model);
         }
-
 
         // GET: Countries/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -99,23 +110,34 @@ namespace GenericApp.Web.Controllers
             {
                 return NotFound();
             }
-            return View(countryEntity);
+
+            CountryViewModel model = _converterHelper.ToCountryViewModel(countryEntity);
+            return View(model);
         }
 
         // POST: Countries/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CountryEntity country)
+        public async Task<IActionResult> Edit(int id, CountryViewModel model)
         {
-            if (id != country.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var path = model.FlagImagePath;
+
+                if (model.ImageFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Flags" +
+                        "");
+                }
+
                 try
                 {
+                    CountryEntity country = _converterHelper.ToCountryEntity(model, path, false);
                     _context.Update(country);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -136,7 +158,7 @@ namespace GenericApp.Web.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(country);
+            return View(model);
         }
 
         // POST: Countries/Delete/5
@@ -161,7 +183,6 @@ namespace GenericApp.Web.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
 
         private bool CountryEntityExists(int id)
         {
@@ -224,7 +245,6 @@ namespace GenericApp.Web.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-
             return View(department);
         }
 
@@ -241,51 +261,55 @@ namespace GenericApp.Web.Controllers
                 return NotFound();
             }
 
-            TeamEntity model = new TeamEntity { IdCountry = country.Id };
+            var model = new TeamViewModel
+            {
+                CountryId = country.Id,
+                IdCountry = country.Id,
+            };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTeam(TeamEntity team)
+        public async Task<IActionResult> AddTeam(TeamViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var path = string.Empty;
+
+                if (model.ImageFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Teams");
+                }
                 CountryEntity country = await _context.Countries
                     .Include(c => c.Teams)
-                    .FirstOrDefaultAsync(c => c.Id == team.IdCountry);
+                    .FirstOrDefaultAsync(c => c.Id == model.CountryId);
                 if (country == null)
                 {
                     return NotFound();
                 }
-
+                TeamEntity team = _converterHelper.ToTeamEntity(model, path, true);
+                team.Country = country;
+                _context.Add(team);
                 try
                 {
-                    team.Id = 0;
-                    country.Teams.Add(team);
-                    _context.Update(country);
                     await _context.SaveChangesAsync();
                     return RedirectToAction($"{nameof(Details)}/{country.Id}");
-
                 }
-                catch (DbUpdateException dbUpdateException)
+                catch (Exception ex)
                 {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    if (ex.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Hay un registro con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "Este Equipo ya existe");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                     }
-                }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
 
-            return View(team);
+            return View(model);
         }
 
         public async Task<IActionResult> EditDepartment(int? id)
@@ -353,20 +377,30 @@ namespace GenericApp.Web.Controllers
 
             CountryEntity country = await _context.Countries.FirstOrDefaultAsync(c => c.Teams.FirstOrDefault(d => d.Id == team.Id) != null);
             team.IdCountry = country.Id;
-            return View(team);
+
+
+            TeamViewModel model = _converterHelper.ToTeamViewModel(team);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditTeam(TeamEntity team)
+        public async Task<IActionResult> EditTeam(TeamViewModel model)
         {
             if (ModelState.IsValid)
             {
+                var path = model.LogoImagePath;
+
+                if (model.ImageFile != null)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Teams");
+                }
                 try
                 {
+                    TeamEntity team = _converterHelper.ToTeamEntity(model, path,false);
                     _context.Update(team);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction($"{nameof(Details)}/{team.IdCountry}");
+                    return RedirectToAction($"{nameof(Details)}/{model.CountryId}");
 
                 }
                 catch (DbUpdateException dbUpdateException)
@@ -385,7 +419,7 @@ namespace GenericApp.Web.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(team);
+            return View(model);
         }
 
         public async Task<IActionResult> DeleteDepartment(int? id)
@@ -578,7 +612,5 @@ namespace GenericApp.Web.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction($"{nameof(DetailsDepartment)}/{department.Id}");
         }
-
-
     }
 }

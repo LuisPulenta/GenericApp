@@ -13,5 +13,13 @@ namespace GenericApp.Web.Helpers
         Task<ProductEntity> ToProductAsync(ProductViewModel model, bool isNew);
 
         ProductViewModel ToProductViewModel(ProductEntity product);
+
+        CountryEntity ToCountryEntity(CountryViewModel model, string path, bool isNew);
+
+        CountryViewModel ToCountryViewModel(CountryEntity countryEntity);
+
+        TeamEntity ToTeamEntity(TeamViewModel model, string path,bool isNew);
+
+        TeamViewModel ToTeamViewModel(TeamEntity product);
     }
 }

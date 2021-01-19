@@ -126,5 +126,30 @@ namespace GenericApp.Web.Helpers
             });
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboUserTypes()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Seleccione un Tipo de Usuario...]",
+                Value = "0"
+            });
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "Admin",
+                Value = "1"
+            });
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "User",
+                Value = "2"
+            });
+
+            return list;
+        }
     }
 }
