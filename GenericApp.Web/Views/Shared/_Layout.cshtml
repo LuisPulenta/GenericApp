@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GenericApp.Web</title>
+    <title>@ViewData["Title"] - GenericApp</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,16 +26,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GenericApp.Web</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GenericApp</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">Acerca de</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contacto</a></li>
 
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Index">Usuarios</a></li>
                         <li><a asp-area="" asp-controller="Countries" asp-action="Index">Países</a></li>
                         <li><a asp-area="" asp-controller="Categories" asp-action="Index">Categorías</a></li>
                         <li><a asp-area="" asp-controller="Products" asp-action="Index">Productos</a></li>
@@ -61,7 +62,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2021 - GenericApp.Web</p>
+            <p>&copy; 2021 - GenericApp by Luis Núñez</p>
         </footer>
     </div>
 

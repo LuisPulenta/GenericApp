@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using GenericApp.Web.Data.Entities;
 using GenericApp.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GenericApp.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly DataContext _context;

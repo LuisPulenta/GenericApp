@@ -41,6 +41,7 @@ namespace GenericApp.Web.Controllers
         {
             return View(await _context.Users
                 .Include(u => u.City)
+                .Include(t => t.FavoriteTeam)
                 .ToListAsync());
         }
 

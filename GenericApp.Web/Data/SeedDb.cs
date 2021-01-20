@@ -55,6 +55,7 @@ namespace GenericApp.Web.Data
                     Address = address,
                     Document = document,
                     City = _context.Cities.FirstOrDefault(),
+                    FavoriteTeam = _context.Teams.FirstOrDefault(),
                     UserType = userType
                 };
 

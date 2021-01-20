@@ -58,7 +58,7 @@ namespace GenericApp.Web.Helpers
             }
 
             User newUser = await GetUserAsync(model.Username);
-            await AddUserToRoleAsync(newUser, UserType.User.ToString());
+            await AddUserToRoleAsync(newUser, user.UserType.ToString());
             return newUser;
         }
 
