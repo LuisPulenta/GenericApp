@@ -313,7 +313,7 @@ namespace GenericApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var imagePath = string.Empty;
+                var imagePath = model.PicturePath;
                 if (model.ImageFile != null)
                 {
                     imagePath = await _imageHelper.UploadImageAsync(model.ImageFile, "Users");

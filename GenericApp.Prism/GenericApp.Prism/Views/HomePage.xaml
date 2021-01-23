@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true"
+             x:Class="GenericApp.Prism.Views.HomePage"
+             BackgroundColor="{StaticResource ColorBackground}"
+             Title="{Binding Title}">
+  
+    <ContentPage.Padding>
+      <OnPlatform x:TypeArguments="Thickness">
+        <On Platform="Android, UWP">0</On>
+        <On Platform="iOS">0,20,0,0</On>
+      </OnPlatform>
+    </ContentPage.Padding>
+
+    <StackLayout Padding="10">
+    <Image x:Name="Logo" HorizontalOptions="Center"
+                           RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=X,Factor=1,Constant=60}"
+                           HeightRequest="150"
+                           Source="logo"/>
+    <BoxView
+      HeightRequest="5"
+      MinimumHeightRequest="1"
+      BackgroundColor="Blue">
+      
+    </BoxView> 
+      
+    <Label
+        Text="BIENVENIDO/A"
+        FontAttributes="Bold"
+        FontSize="Large"
+        HorizontalOptions="CenterAndExpand">
+    </Label>
+
+    <Label FontAttributes="Bold"
+        FontSize="Large"
+        Text="{Binding User.FullName}"
+        HorizontalOptions="CenterAndExpand"/>
+    <ffimageloading:CachedImage x:Name="Picture" 
+                                                Aspect="AspectFit"
+                                                Source="{Binding User.PictureFullPath}" 
+                                                CacheDuration= "50"
+                                                HeightRequest="250"
+                                                Margin="5"
+                                                RetryCount= "3"
+                                                RetryDelay= "600">
+      <ffimageloading:CachedImage.Transformations>
+        <fftransformations:CircleTransformation />
+      </ffimageloading:CachedImage.Transformations>
+    </ffimageloading:CachedImage>
+    <RelativeLayout>
+      <ffimageloading:CachedImage x:Name="Team" 
+                                                RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, ElementName=Picture,Property=X,Factor=1,Constant=250}"
+                                                RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, ElementName=Picture,Property=Y,Factor=1,Constant=-650}"
+                                               
+                                                Aspect="AspectFit"
+                                                Source="{Binding User.FavoriteTeam.LogoImageFullPath}" 
+                                                CacheDuration= "100"
+                                                HeightRequest="100"
+                                                Margin="5"
+                                                RetryCount= "3"
+                                                RetryDelay= "600"/>
+
+    </RelativeLayout>
+
+
+
+  </StackLayout>
+
+  
+  
+  
+</ContentPage>

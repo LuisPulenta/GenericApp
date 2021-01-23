@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using GenericApp.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using GenericApp.Web.Data.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace GenericApp.Web
 {
@@ -50,6 +52,18 @@ namespace GenericApp.Web
             })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<DataContext>();
+
+            services.AddAuthentication()
+                .AddCookie()
+                .AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["Tokens:Issuer"],
+                    ValidAudience = Configuration["Tokens:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                };
+            });
 
 
             services.AddDbContext<DataContext>(cfg =>
