@@ -13,9 +13,26 @@ namespace GenericApp.Web.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public int CategoryId { get; set; }
 
+        [Display(Name = "Estado")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un estado.")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        public int StateId { get; set; }
+
         public IFormFile ImageFile { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }
+
+        public IEnumerable<SelectListItem> States { get; set; }
+
+        [Display(Name = "Latitud")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public double Latitude { get; set; }
+
+        [Display(Name = "Longitud")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public double Longitude { get; set; }
 
         [Display(Name = "Precio")]
         [MaxLength(12)]

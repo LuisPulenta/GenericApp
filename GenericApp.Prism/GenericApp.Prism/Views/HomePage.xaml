@@ -27,7 +27,6 @@
       HeightRequest="5"
       MinimumHeightRequest="1"
       BackgroundColor="Blue">
-      
     </BoxView> 
       
     <Label
@@ -67,12 +66,5 @@
                                                 RetryDelay= "600"/>
 
     </RelativeLayout>
-
-
-
   </StackLayout>
-
-  
-  
-  
 </ContentPage>

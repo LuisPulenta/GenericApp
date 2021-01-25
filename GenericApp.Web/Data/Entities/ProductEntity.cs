@@ -28,6 +28,19 @@ namespace GenericApp.Web.Data.Entities
         [DisplayName("Categoría")]
         public CategoryEntity Category { get; set; }
 
+        [DisplayName("Latitud")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public double Latitude { get; set; }
+        
+        [DisplayName("Longitud")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public double Longitude { get; set; }
+
+        [DisplayName("Estado")]
+        public StateEntity State { get; set; }
+
         public ICollection<ProductImageEntity> ProductImages { get; set; }
 
         [DisplayName("N° Imágenes")]

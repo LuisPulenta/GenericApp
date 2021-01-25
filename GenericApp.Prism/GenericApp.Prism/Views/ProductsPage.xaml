@@ -12,9 +12,11 @@
              Title="{Binding Title}">
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem Text="{Binding CartNumber}" Command="{Binding ShowCartCommand}"/>
+    <ToolbarItem Icon="ic_add_circle_outline"
+                 Command="{Binding AddProductCommand}" />
+    <ToolbarItem Icon="ic_map"
+                 Command="{Binding ProductsMapCommand}" />
   </ContentPage.ToolbarItems>
-
 
   <AbsoluteLayout>
     <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
@@ -52,10 +54,34 @@
                                        FontAttributes="Bold"
                                        FontSize="Medium"
                                        LineBreakMode="TailTruncation" />
+                
                 <Label Text="{Binding Price, StringFormat='{0:C2}'}"
                                        LineBreakMode="TailTruncation"
                                        FontAttributes="Italic" 
                                        VerticalOptions="End" />
+                <StackLayout Orientation="Horizontal">
+                  <Label
+                    Text="Lat:"
+                      FontAttributes="Italic"
+                    FontSize="Micro">
+                  </Label>
+                  <Label Text="{Binding Latitude}"
+                                      FontAttributes="Italic" 
+                                      FontSize="Micro"                         
+                                      VerticalOptions="End" />
+                  <Label
+                    Text="Long:"
+                      FontAttributes="Italic"
+                    FontSize="Micro">
+                  </Label>
+                  <Label Text="{Binding Longitude}"
+                                      FontAttributes="Italic" 
+                         FontSize="Micro"
+                                      VerticalOptions="End" />
+                </StackLayout>
+                <Label Text="{Binding State.Name}"
+                                      FontAttributes="Italic" 
+                                      VerticalOptions="End" />
               </StackLayout>
               <Image Grid.Column="2" 
                                    Source="ic_more_vert"/>

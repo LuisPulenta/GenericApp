@@ -31,8 +31,9 @@ namespace GenericApp.Web.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Products
-                .Include(p => p.Category)
+                .Include(c => c.Category)
                 .Include(p => p.ProductImages)
+                .Include(s=>s.State)
                 .ToListAsync());
         }
 
@@ -41,6 +42,7 @@ namespace GenericApp.Web.Controllers
             ProductViewModel model = new ProductViewModel
             {
                 Categories = _combosHelper.GetComboCategories(),
+                States = _combosHelper.GetComboStates(),
                 IsActive = true
             };
 
@@ -89,6 +91,7 @@ namespace GenericApp.Web.Controllers
                 }
             }
             model.Categories = _combosHelper.GetComboCategories();
+            model.States = _combosHelper.GetComboStates();
             return View(model);
         }
 
@@ -100,8 +103,9 @@ namespace GenericApp.Web.Controllers
             }
 
             ProductEntity product = await _context.Products
-                .Include(p => p.Category)
+                .Include(c => c.Category)
                 .Include(p => p.ProductImages)
+                .Include(s => s.State)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
@@ -197,7 +201,8 @@ namespace GenericApp.Web.Controllers
 
             ProductEntity product = await _context.Products
                 .Include(c => c.Category)
-                .Include(c => c.ProductImages)
+                .Include(p => p.ProductImages)
+                .Include(s => s.State)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {

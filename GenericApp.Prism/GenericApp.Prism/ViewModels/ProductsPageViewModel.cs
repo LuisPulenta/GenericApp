@@ -14,27 +14,24 @@ namespace GenericApp.Prism.ViewModels
     {
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
+        
         private bool _isRunning;
-        private string _search;
-        private List<ProductResponse> _myProducts;
-        private DelegateCommand _searchCommand;
-        private ObservableCollection<ProductItemViewModel> _products;
-
-        private int _cartNumber;
-        public int CartNumber
+        public bool IsRunning
         {
-            get => _cartNumber;
-            set => SetProperty(ref _cartNumber, value);
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
         }
 
+        private List<ProductResponse> _myProducts;
+        
+        private ObservableCollection<ProductItemViewModel> _products;
         public ObservableCollection<ProductItemViewModel> Products
         {
             get => _products;
             set => SetProperty(ref _products, value);
         }
 
-        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(ShowProducts));
-
+        private string _search;
         public string Search
         {
             get => _search;
@@ -45,23 +42,27 @@ namespace GenericApp.Prism.ViewModels
             }
         }
 
+        private DelegateCommand _searchCommand;
+        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(ShowProducts));
+        private DelegateCommand _productsMapCommand;
+        public DelegateCommand ProductsMapCommand => _productsMapCommand ?? (_productsMapCommand = new DelegateCommand(ProductsMap));
+
+        private static ProductsPageViewModel _instance;
+        public static ProductsPageViewModel GetInstance()
+        {
+            return _instance;
+        }
+
         public ProductsPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
             _navigationService = navigationService;
             _apiService = apiService;
+            _instance = this;
             Title = "Products";
             LoadProductsAsync();
-
-
         }
 
-        public bool IsRunning
-        {
-            get => _isRunning;
-            set => SetProperty(ref _isRunning, value);
-        }
-
-
+        
 
         private async void LoadProductsAsync()
         {
@@ -85,12 +86,8 @@ namespace GenericApp.Prism.ViewModels
                     "Aceptar");
                 return;
             }
-
             _myProducts = (List<ProductResponse>)response.Result;
             ShowProducts();
-
-            //List<Product> myProducts = (List<Product>)response.Result;
-            //Products = new ObservableCollection<Product>(myProducts);
         }
 
         private void ShowProducts()
@@ -103,9 +100,12 @@ namespace GenericApp.Prism.ViewModels
                     Description = p.Description,
                     Id = p.Id,
                     IsActive = p.IsActive,
+                    Latitude=p.Latitude,
+                    Longitude=p.Longitude,
                     Name = p.Name,
                     Price = p.Price,
                     ProductImages = p.ProductImages,
+                    State=p.State
                 })
     .ToList());
 
@@ -118,13 +118,26 @@ namespace GenericApp.Prism.ViewModels
                     Description = p.Description,
                     Id = p.Id,
                     IsActive = p.IsActive,
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
                     Name = p.Name,
                     Price = p.Price,
                     ProductImages = p.ProductImages,
+                    State = p.State
                 })
     .Where(p => p.Name.ToLower().Contains(Search.ToLower()))
     .ToList());
             }
+        }
+
+        private async void ProductsMap()
+        {
+            await _navigationService.NavigateAsync("ProductsMapPage");
+        }
+
+        public async void CerrarMapa()
+        {
+            await _navigationService.GoBackAsync();
         }
     }
 }

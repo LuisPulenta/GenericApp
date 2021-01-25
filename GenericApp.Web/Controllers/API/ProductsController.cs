@@ -23,8 +23,9 @@ namespace GenericApp.Web.Controllers.API
         public async Task<IActionResult> GetProducts()
         {
             List<ProductEntity> products = await _context.Products
-                .Include(p => p.Category)
+                .Include(c => c.Category)
                 .Include(p => p.ProductImages)
+                .Include(s => s.State)
                 .Where(p => p.IsActive)
                 .ToListAsync();
             return Ok(products);

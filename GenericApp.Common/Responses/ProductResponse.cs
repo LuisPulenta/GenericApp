@@ -17,6 +17,12 @@ namespace GenericApp.Common.Responses
 
         public CategoryResponse Category { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
+        public StateResponse State { get; set; }
+
         public ICollection<ProductImageResponse> ProductImages { get; set; }
 
         public int ProductImagesNumber => ProductImages == null ? 0 : ProductImages.Count;

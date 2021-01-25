@@ -45,9 +45,12 @@ namespace GenericApp.Web.Helpers
                 Description = model.Description,
                 Id = isNew ? 0 : model.Id,
                 IsActive = model.IsActive,
+                Latitude=model.Latitude,
+                Longitude=model.Longitude,
                 Name = model.Name,
                 Price = ToPrice(model.PriceString),
-                ProductImages = model.ProductImages
+                ProductImages = model.ProductImages,
+                State= await _context.States.FindAsync(model.StateId),
             };
         }
 
@@ -77,9 +80,14 @@ namespace GenericApp.Web.Helpers
                 Description = product.Description,
                 Id = product.Id,
                 IsActive = product.IsActive,
+                Latitude = product.Latitude,
+                Longitude = product.Longitude,
                 Name = product.Name,
                 PriceString = $"{product.Price}",
                 ProductImages = product.ProductImages,
+                States = _combosHelper.GetComboStates(),
+                State = product.State,
+                StateId=product.State.Id
             };
         }
 

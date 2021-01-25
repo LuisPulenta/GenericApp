@@ -16,6 +16,7 @@ namespace GenericApp.Web.Data
         public DbSet<DepartmentEntity> Departments { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ProductImageEntity> ProductImages { get; set; }
+        public DbSet<StateEntity> States { get; set; }
         public DbSet<TeamEntity> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

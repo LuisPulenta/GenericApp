@@ -16,5 +16,7 @@ namespace GenericApp.Web.Helpers
         IEnumerable<SelectListItem> GetComboTeams(int countryId);
 
         IEnumerable<SelectListItem> GetComboUserTypes();
+
+        IEnumerable<SelectListItem> GetComboStates();
     }
 }

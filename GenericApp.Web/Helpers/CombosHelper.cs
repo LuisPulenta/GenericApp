@@ -151,5 +151,23 @@ namespace GenericApp.Web.Helpers
 
             return list;
         }
+
+        public IEnumerable<SelectListItem> GetComboStates()
+        {
+            List<SelectListItem> list = _context.States.Select(t => new SelectListItem
+            {
+                Text = t.Name,
+                Value = $"{t.Id}"
+            })
+                .OrderBy(t => t.Value)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Seleccione un estado...]",
+                Value = "0"
+            });
+            return list;
+        }
     }
 }
