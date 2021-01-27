@@ -24,16 +24,6 @@ namespace GenericApp.Web.Models
 
         public IEnumerable<SelectListItem> States { get; set; }
 
-        [Display(Name = "Latitud")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        [DisplayFormat(DataFormatString = "{0:N4}")]
-        public double Latitude { get; set; }
-
-        [Display(Name = "Longitud")]
-        [Required(ErrorMessage = "El campo {0} es requerido")]
-        [DisplayFormat(DataFormatString = "{0:N4}")]
-        public double Longitude { get; set; }
-
         [Display(Name = "Precio")]
         [MaxLength(12)]
         [RegularExpression(@"^\d+([\.\,]?\d+)?$", ErrorMessage = "Use sólo números o . o , para poner decimales")]

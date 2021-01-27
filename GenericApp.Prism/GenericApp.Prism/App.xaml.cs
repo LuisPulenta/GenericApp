@@ -53,6 +53,7 @@ namespace GenericApp.Prism
             containerRegistry.RegisterForNavigation<ProductsPage, ProductsPageViewModel>();
             containerRegistry.RegisterForNavigation<HomePage, HomePageViewModel>();
             containerRegistry.RegisterForNavigation<ProductsMapPage, ProductsMapPageViewModel>();
+            containerRegistry.RegisterForNavigation<AddProductPage, AddProductPageViewModel>();
         }
     }
 }

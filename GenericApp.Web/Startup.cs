@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using GenericApp.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using GenericApp.Web.Data.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using GenericApp.Common.Helpers;
 
 namespace GenericApp.Web
 {
@@ -77,6 +77,7 @@ namespace GenericApp.Web
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
+            services.AddScoped<IFilesHelper, FilesHelper>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

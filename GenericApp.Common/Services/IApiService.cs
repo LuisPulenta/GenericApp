@@ -26,5 +26,13 @@ namespace GenericApp.Common.Services
         Task<Response> PutAsync<T>(string urlBase, string servicePrefix, string controller, T model, string token);
 
         Task<Stream> GetPictureAsync(string urlBase, string servicePrefix);
+        
+        Task<ResponseT<object>> PostAsync<T>(
+          string urlBase,
+          string servicePrefix,
+          string controller,
+          T model,
+          string tokenType,
+          string accessToken);
     }
 }

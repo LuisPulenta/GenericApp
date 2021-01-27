@@ -22,6 +22,9 @@ namespace GenericApp.Prism.ViewModels
             set => SetProperty(ref _isRunning, value);
         }
 
+        private bool _isRefreshing;
+        public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
+
         private List<ProductResponse> _myProducts;
         
         private ObservableCollection<ProductItemViewModel> _products;
@@ -38,12 +41,14 @@ namespace GenericApp.Prism.ViewModels
             set
             {
                 SetProperty(ref _search, value);
-                ShowProducts();
+                RefreshList();
             }
         }
-
+        
+        private DelegateCommand _addProductCommand;
+        public DelegateCommand AddProductCommand => _addProductCommand ?? (_addProductCommand = new DelegateCommand(AddProduct));
         private DelegateCommand _searchCommand;
-        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(ShowProducts));
+        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(RefreshList));
         private DelegateCommand _productsMapCommand;
         public DelegateCommand ProductsMapCommand => _productsMapCommand ?? (_productsMapCommand = new DelegateCommand(ProductsMap));
 
@@ -58,13 +63,13 @@ namespace GenericApp.Prism.ViewModels
             _navigationService = navigationService;
             _apiService = apiService;
             _instance = this;
-            Title = "Products";
+            Title = "Productos";
             LoadProductsAsync();
         }
 
         
 
-        private async void LoadProductsAsync()
+        public async void LoadProductsAsync()
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
@@ -87,11 +92,12 @@ namespace GenericApp.Prism.ViewModels
                 return;
             }
             _myProducts = (List<ProductResponse>)response.Result;
-            ShowProducts();
+            RefreshList();
         }
 
-        private void ShowProducts()
+        public void RefreshList()
         {
+            IsRefreshing = true;
             if (string.IsNullOrEmpty(Search))
             {
                 Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p => new ProductItemViewModel(_navigationService)
@@ -125,7 +131,11 @@ namespace GenericApp.Prism.ViewModels
                     ProductImages = p.ProductImages,
                     State = p.State
                 })
-    .Where(p => p.Name.ToLower().Contains(Search.ToLower()))
+    .Where(p => 
+                    p.Name.ToLower().Contains(Search.ToLower())
+                    ||
+                    p.State.Name.ToLower().Contains(Search.ToLower())
+          )
     .ToList());
             }
         }
@@ -138,6 +148,11 @@ namespace GenericApp.Prism.ViewModels
         public async void CerrarMapa()
         {
             await _navigationService.GoBackAsync();
+        }
+
+        private async void AddProduct()
+        {
+            await _navigationService.NavigateAsync("AddProductPage");
         }
     }
 }
