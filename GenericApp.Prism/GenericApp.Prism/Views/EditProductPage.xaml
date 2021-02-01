@@ -2,11 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfRotator.XForms;assembly=Syncfusion.SfRotator.XForms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"  
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
-             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
-             x:Class="GenericApp.Prism.Views.AddProductPage"
+             x:Class="GenericApp.Prism.Views.EditProductPage"
              BackgroundColor="White"
              Title="{Binding Title}">
 
@@ -16,9 +18,12 @@
                      AbsoluteLayout.LayoutFlags="All" 
                      Padding="5">
       <ScrollView>
+        
+        
+        
+        
         <StackLayout
             Padding="5">
-
           <Grid Padding="5,5">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="1.2*" />
@@ -52,7 +57,7 @@
                 IsEnabled="True"
                 ItemDisplayBinding="{Binding Name}"
                 ItemsSource="{Binding Categories}"
-                SelectedItem="{Binding Category, Mode=TwoWay}"
+                SelectedItem="{Binding Category}"
                 HeightRequest="40"
                 Title="Elija Categoría"></Picker>
 
@@ -74,7 +79,7 @@
                            Placeholder="Ingrese Nombre..."
                            HeightRequest="40"
                            Text="{Binding Name}"/>
-            
+
             <Label 
               Grid.Row="2" 
               Grid.Column="0"
@@ -84,14 +89,14 @@
               VerticalOptions="Center"
               TextColor="Black"
               FontAttributes="Bold"></Label>
-            
-            <Entry HorizontalOptions="FillAndExpand" 
+
+            <Editor HorizontalOptions="FillAndExpand" 
                     Grid.Row="3" 
               Grid.Column="0"
                     Grid.ColumnSpan="4"
-                 FontSize="Small"
+                 FontSize="Micro"
                            Placeholder="Ingrese Descripción..."
-                           HeightRequest="40"
+                           HeightRequest="80"
                            Text="{Binding Description}"/>
             <ImageButton 
                  Grid.Row="3" 
@@ -115,7 +120,7 @@
               FontSize="Small"
               VerticalOptions="Center"
               TextColor="Black"></Entry>
-            
+
             <Label 
               Grid.Row="5"
               Grid.Column="0"
@@ -173,42 +178,42 @@
 
           <!--***** TOMAR FOTOS *****-->
 
-          <Grid Padding="5,5"
-                VerticalOptions="EndAndExpand">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+          <syncfusion:SfRotator 
+                              x:Name="rotator" 
+                              SelectedIndexChanged="Rotator_SelectedIndexChanged"
+                              BackgroundColor="White"
+                              EnableAutoPlay="True"
+                              EnableLooping="True"
+                              HeightRequest="300"
+                              ItemsSource="{Binding Images}"
+                              NavigationDelay="5000"
+                              NavigationDirection="Horizontal"
+                              NavigationStripMode="Thumbnail"
+                              NavigationStripPosition="Bottom">
+            <syncfusion:SfRotator.ItemTemplate>
+              <DataTemplate>
+                <ffimageloading:CachedImage Aspect="AspectFit"
+                                          CacheDuration="50"
+                                          DownsampleToViewSize="true"
+                                          ErrorPlaceholder="ErrorImage"
+                                          HeightRequest="300"
+                                          LoadingPlaceholder="LoaderImage"
+                                          RetryCount="3"
+                                          RetryDelay="600"
+                                          Source="{Binding ImageFullPath}" />
+              </DataTemplate>
+            </syncfusion:SfRotator.ItemTemplate>
+          </syncfusion:SfRotator>
 
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
 
-            <Label
-              Grid.Row="0"
-              Grid.Column="0"
-              Text="Toque la imagen para cargar/cambiar una foto"
-              FontSize="Small"
-              TextColor="Blue"></Label>
-
-            <Image 
-              Grid.Row="1"
-              Grid.Column="0"
-              HeightRequest="250"
-              HorizontalOptions="CenterAndExpand"
-              Source="{Binding ImageSource, Mode=TwoWay}">
-              <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding TakePhotoCommand}" />
-              </Image.GestureRecognizers>
-            </Image>
-          </Grid>
         </StackLayout>
       </ScrollView>
 
       <Grid Padding="5,5"
                 VerticalOptions="EndAndExpand">
         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
           <ColumnDefinition Width="*" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -219,15 +224,16 @@
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+
         <Button 
           Grid.Row="0"
           Grid.Column="0"
         Text="cancelar"
         BackgroundColor="Red"
         IsEnabled="{Binding IsEnabled}"
-        CornerRadius="30"
+         CornerRadius="30"
         HeightRequest="60"
-        FontSize="Small"
+        FontSize="Micro"
         TextColor="White"
         FontAttributes="Bold"
         VerticalOptions="EndAndExpand"
@@ -235,14 +241,44 @@
         </Button>
 
         <Button 
-           Grid.Row="0"
+          Grid.Row="0"
           Grid.Column="1"
-        Text="grabar"
-        BackgroundColor="Blue"
+        Text="BORRAR FOTO"
+        BackgroundColor="DarkViolet"
         IsEnabled="{Binding IsEnabled}"
         CornerRadius="30"
         HeightRequest="60"
-        FontSize="Small"
+        FontSize="Micro"
+        TextColor="White"
+        FontAttributes="Bold"
+        VerticalOptions="EndAndExpand"
+        Command="{Binding DeletePhotoCommand}">
+        </Button>
+
+        <Button 
+          Grid.Row="0"
+          Grid.Column="2"
+        Text="NUEVA FOTO"
+        BackgroundColor="Violet"
+        IsEnabled="{Binding IsEnabled}"
+         CornerRadius="30"
+        HeightRequest="60"
+        FontSize="Micro"
+        TextColor="White"
+        FontAttributes="Bold"
+        VerticalOptions="EndAndExpand"
+        Command="{Binding NewPhotoCommand}">
+        </Button>
+
+        <Button 
+           Grid.Row="0"
+          Grid.Column="3"
+        Text="grabar"
+        BackgroundColor="Blue"
+        IsEnabled="{Binding IsEnabled}"
+         CornerRadius="30"
+        HeightRequest="60"
+        FontSize="Micro"
         TextColor="White"
         FontAttributes="Bold"
         VerticalOptions="End"
@@ -261,4 +297,5 @@
                 	                   ViewBoxWidth="80"
                 	                   ViewBoxHeight="80" />
   </AbsoluteLayout>
+  
 </ContentPage>

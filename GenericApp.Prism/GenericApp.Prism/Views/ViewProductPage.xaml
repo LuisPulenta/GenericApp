@@ -2,11 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfRotator.XForms;assembly=Syncfusion.SfRotator.XForms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"  
              prism:ViewModelLocator.AutowireViewModel="True"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true"
-             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
-             x:Class="GenericApp.Prism.Views.AddProductPage"
+             x:Class="GenericApp.Prism.Views.ViewProductPage"
              BackgroundColor="White"
              Title="{Binding Title}">
 
@@ -16,9 +18,12 @@
                      AbsoluteLayout.LayoutFlags="All" 
                      Padding="5">
       <ScrollView>
+
+
+
+
         <StackLayout
             Padding="5">
-
           <Grid Padding="5,5">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="1.2*" />
@@ -38,23 +43,20 @@
             <Label 
               Grid.Row="0"
               Grid.Column="0"
-              
               Text="Categoría:"
               FontSize="Small"
               VerticalOptions="Center"
               TextColor="Black"
               FontAttributes="Bold"></Label>
-            <Picker x:Name="Categoría"
+            <Label 
                 Grid.Row="0"
                 Grid.Column="1"
                 Grid.ColumnSpan="4"    
                 FontSize="Small"
                 IsEnabled="True"
-                ItemDisplayBinding="{Binding Name}"
-                ItemsSource="{Binding Categories}"
-                SelectedItem="{Binding Category, Mode=TwoWay}"
-                HeightRequest="40"
-                Title="Elija Categoría"></Picker>
+                Text="{Binding Category.Name}"
+                VerticalOptions="Center"
+                ></Label>
 
             <Label 
               Grid.Row="1" 
@@ -66,15 +68,14 @@
               TextColor="Black"
               FontAttributes="Bold"></Label>
 
-            <Entry HorizontalOptions="FillAndExpand" 
+            <Label HorizontalOptions="FillAndExpand" 
                     Grid.Row="1" 
-              Grid.Column="1"
+                    Grid.Column="1"
                     Grid.ColumnSpan="3"
-                 FontSize="Small"
-                           Placeholder="Ingrese Nombre..."
-                           HeightRequest="40"
-                           Text="{Binding Name}"/>
-            
+                    FontSize="Small"
+                    VerticalOptions="Center"
+                    Text="{Binding Description}"/>
+
             <Label 
               Grid.Row="2" 
               Grid.Column="0"
@@ -84,21 +85,14 @@
               VerticalOptions="Center"
               TextColor="Black"
               FontAttributes="Bold"></Label>
-            
-            <Entry HorizontalOptions="FillAndExpand" 
+
+            <Label HorizontalOptions="FillAndExpand" 
                     Grid.Row="3" 
               Grid.Column="0"
-                    Grid.ColumnSpan="4"
-                 FontSize="Small"
-                           Placeholder="Ingrese Descripción..."
-                           HeightRequest="40"
+                    Grid.ColumnSpan="5"
+                 FontSize="Micro"
+                           HeightRequest="80"
                            Text="{Binding Description}"/>
-            <ImageButton 
-                 Grid.Row="3" 
-              Grid.Column="4"
-                Command="{Binding GetAddressCommand}"
-                                 Source="ic_map_black"/>
-
             <Label 
               Grid.Row="4"
               Grid.Column="0"
@@ -107,15 +101,15 @@
               VerticalOptions="Center"
               TextColor="Black"
               FontAttributes="Bold"></Label>
-            <Entry 
+            <Label 
               Grid.Row="4"
               Grid.Column="1"
               Grid.ColumnSpan="2"
-              Text="{Binding Price}"
+              Text="{Binding Price, StringFormat='{0:C2}'}"
               FontSize="Small"
               VerticalOptions="Center"
-              TextColor="Black"></Entry>
-            
+              TextColor="Black"></Label>
+
             <Label 
               Grid.Row="5"
               Grid.Column="0"
@@ -158,58 +152,50 @@
               VerticalOptions="Center"
               TextColor="Black"
               FontAttributes="Bold"></Label>
-            <Picker x:Name="Estado"
+            <Label 
                 Grid.Row="6"
                 Grid.Column="1"
                 Grid.ColumnSpan="4"    
                 FontSize="Small"
                 IsEnabled="True"
-                ItemDisplayBinding="{Binding Name}"
-                ItemsSource="{Binding States}"
-                SelectedItem="{Binding State}"
-                HeightRequest="40"
-                Title="Elija el Estado"></Picker>
+                Text="{Binding State.Name}"></Label>
           </Grid>
 
           <!--***** TOMAR FOTOS *****-->
 
-          <Grid Padding="5,5"
-                VerticalOptions="EndAndExpand">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+          <syncfusion:SfRotator 
+                              x:Name="rotator" 
+                              BackgroundColor="White"
+                              EnableAutoPlay="True"
+                              EnableLooping="True"
+                              HeightRequest="300"
+                              ItemsSource="{Binding Images}"
+                              NavigationDelay="5000"
+                              NavigationDirection="Horizontal"
+                              NavigationStripMode="Thumbnail"
+                              NavigationStripPosition="Bottom">
+            <syncfusion:SfRotator.ItemTemplate>
+              <DataTemplate>
+                <ffimageloading:CachedImage Aspect="AspectFit"
+                                          CacheDuration="50"
+                                          DownsampleToViewSize="true"
+                                          ErrorPlaceholder="ErrorImage"
+                                          HeightRequest="300"
+                                          LoadingPlaceholder="LoaderImage"
+                                          RetryCount="3"
+                                          RetryDelay="600"
+                                          Source="{Binding ImageFullPath}" />
+              </DataTemplate>
+            </syncfusion:SfRotator.ItemTemplate>
+          </syncfusion:SfRotator>
 
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
 
-            <Label
-              Grid.Row="0"
-              Grid.Column="0"
-              Text="Toque la imagen para cargar/cambiar una foto"
-              FontSize="Small"
-              TextColor="Blue"></Label>
-
-            <Image 
-              Grid.Row="1"
-              Grid.Column="0"
-              HeightRequest="250"
-              HorizontalOptions="CenterAndExpand"
-              Source="{Binding ImageSource, Mode=TwoWay}">
-              <Image.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding TakePhotoCommand}" />
-              </Image.GestureRecognizers>
-            </Image>
-          </Grid>
         </StackLayout>
       </ScrollView>
 
       <Grid Padding="5,5"
                 VerticalOptions="EndAndExpand">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -219,13 +205,14 @@
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+
         <Button 
           Grid.Row="0"
           Grid.Column="0"
-        Text="cancelar"
-        BackgroundColor="Red"
+        Text="regresar"
+        BackgroundColor="Blue"
         IsEnabled="{Binding IsEnabled}"
-        CornerRadius="30"
+         CornerRadius="30"
         HeightRequest="60"
         FontSize="Small"
         TextColor="White"
@@ -233,32 +220,10 @@
         VerticalOptions="EndAndExpand"
         Command="{Binding CancelCommand}">
         </Button>
-
-        <Button 
-           Grid.Row="0"
-          Grid.Column="1"
-        Text="grabar"
-        BackgroundColor="Blue"
-        IsEnabled="{Binding IsEnabled}"
-        CornerRadius="30"
-        HeightRequest="60"
-        FontSize="Small"
-        TextColor="White"
-        FontAttributes="Bold"
-        VerticalOptions="End"
-        Command="{Binding SaveCommand}"></Button>
+    
       </Grid>
     </StackLayout>
-    <busyindicator:SfBusyIndicator AnimationType="Gear" 
-                                     AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
-                	                   AbsoluteLayout.LayoutFlags="All"
-                	                   BackgroundColor="Transparent"
-                	                   HorizontalOptions="Center"
-                	                   TextColor="Blue"
-                	                   IsVisible="{Binding IsRunning}"
-                	                   Title="Guardando..."
-                	                   VerticalOptions="Center"
-                	                   ViewBoxWidth="80"
-                	                   ViewBoxHeight="80" />
+   
   </AbsoluteLayout>
+
 </ContentPage>

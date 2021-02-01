@@ -5,6 +5,7 @@ using Plugin.Permissions;
 using Prism;
 using Prism.Ioc;
 using Syncfusion.SfBusyIndicator.XForms.Droid;
+using Syncfusion.SfRotator.XForms.Droid;
 
 namespace GenericApp.Prism.Droid
 {
@@ -21,7 +22,10 @@ namespace GenericApp.Prism.Droid
 
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             new SfBusyIndicatorRenderer();
+            new SfRotatorRenderer();
             Xamarin.FormsMaps.Init(this, savedInstanceState);
+
+            new SfBusyIndicatorRenderer();
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
             LoadApplication(new App(new AndroidInitializer()));
         }

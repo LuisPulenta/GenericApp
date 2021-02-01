@@ -19,7 +19,7 @@ namespace GenericApp.Common.Services
 
         Task<Response> ChangePasswordAsync(string urlBase, string servicePrefix, string controller, ChangePasswordRequest changePasswordRequest, string token);
 
-        Task<Response> PostAsync<T>(string urlBase, string servicePrefix, string controller, T model, string token);
+        //Task<Response> PostAsync<T>(string urlBase, string servicePrefix, string controller, T model, string token);
 
         Task<Response> GetListAsync<T>(string urlBase, string servicePrefix, string controller, string token);
 
@@ -34,5 +34,22 @@ namespace GenericApp.Common.Services
           T model,
           string tokenType,
           string accessToken);
+
+        Task<ResponseT<object>> PutAsync<T>(
+           string urlBase,
+           string servicePrefix,
+           string controller,
+           int id,
+           T model,
+           string tokenType,
+           string accessToken);
+
+        Task<Response> DeleteAsync(
+           string urlBase,
+           string servicePrefix,
+           string controller,
+           int id,
+           string tokenType,
+           string accessToken);
     }
 }

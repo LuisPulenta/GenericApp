@@ -1,7 +1,10 @@
-﻿using GenericApp.Web.Data;
+﻿using GenericApp.Common.Responses;
+using GenericApp.Web.Data;
 using GenericApp.Web.Data.Entities;
 using GenericApp.Web.Models;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GenericApp.Web.Helpers
@@ -45,12 +48,12 @@ namespace GenericApp.Web.Helpers
                 Description = model.Description,
                 Id = isNew ? 0 : model.Id,
                 IsActive = model.IsActive,
-                Latitude=model.Latitude,
-                Longitude=model.Longitude,
+                Latitude = model.Latitude,
+                Longitude = model.Longitude,
                 Name = model.Name,
                 Price = ToPrice(model.PriceString),
                 ProductImages = model.ProductImages,
-                State= await _context.States.FindAsync(model.StateId),
+                State = await _context.States.FindAsync(model.StateId),
             };
         }
 
@@ -87,7 +90,7 @@ namespace GenericApp.Web.Helpers
                 ProductImages = product.ProductImages,
                 States = _combosHelper.GetComboStates(),
                 State = product.State,
-                StateId=product.State.Id
+                StateId = product.State.Id
             };
         }
 
@@ -106,12 +109,12 @@ namespace GenericApp.Web.Helpers
             return new CountryViewModel
             {
                 Id = countryEntity.Id,
-                FlagImagePath= countryEntity.FlagImagePath,
+                FlagImagePath = countryEntity.FlagImagePath,
                 Name = countryEntity.Name
             };
         }
 
-        
+
 
         public TeamEntity ToTeamEntity(TeamViewModel model, string path, bool isNew)
         {
@@ -120,23 +123,65 @@ namespace GenericApp.Web.Helpers
                 Id = isNew ? 0 : model.Id,
                 LogoImagePath = path,
                 Name = model.Name,
-                IdCountry=model.IdCountry,
+                IdCountry = model.IdCountry,
                 Country = model.Country,
             };
         }
 
-       
+
         public TeamViewModel ToTeamViewModel(TeamEntity team)
         {
             return new TeamViewModel
             {
                 Countries = _combosHelper.GetComboCountries(),
-                Country= team.Country,
-                CountryId=team.Country.Id,
+                Country = team.Country,
+                CountryId = team.Country.Id,
                 Id = team.Id,
                 Name = team.Name,
-                LogoImagePath=team.LogoImagePath,
+                LogoImagePath = team.LogoImagePath,
             };
+        }
+
+
+
+        public  ProductResponse ToProductResponse(ProductEntity productEntity)
+        {
+            return new ProductResponse
+            {
+                Id = productEntity.Id,
+                IsActive = productEntity.IsActive,
+                Description = productEntity.Description,
+                Name = productEntity.Name,
+                Price= productEntity.Price,
+                Latitude = productEntity.Latitude,
+                Longitude = productEntity.Longitude,
+                Category = new CategoryResponse
+                {
+                    Id = productEntity.Category.Id,
+                    Name = productEntity.Category.Name,
+                    ImagePath = productEntity.Category.ImagePath,
+                },
+                State = new StateResponse {
+                    Id = productEntity.State.Id,
+                    Name = productEntity.State.Name,
+                },
+                ProductImages = productEntity.ProductImages?.Select(g => new ProductImageResponse
+                {
+                    Id = g.Id,
+                    ImagePath=g.ImagePath,
+                    ProductId=g.Product.Id
+                }).ToList()
+            };
+        }
+
+        public List<ProductResponse> ToProductResponse(List<ProductEntity> productEntities)
+        {
+            List<ProductResponse> list = new List<ProductResponse>();
+            foreach (ProductEntity productEntity in productEntities)
+            {
+                list.Add(ToProductResponse(productEntity));
+            }
+            return list;
         }
     }
 }

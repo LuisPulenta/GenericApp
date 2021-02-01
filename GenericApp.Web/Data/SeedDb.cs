@@ -23,6 +23,7 @@ namespace GenericApp.Web.Data
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
             await CheckRolesAsync();
+            await CheckStatesAsync();
             await CheckUserAsync("17157729", "Luis", "Núñez", "luisalbertonu@gmail.com", "156 814 963", "Espora 2052", UserType.Admin);
 
         }
@@ -186,6 +187,30 @@ namespace GenericApp.Web.Data
                     }
                 });
 
+            };
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task CheckStatesAsync()
+        {
+            if (!_context.States.Any())
+            {
+                _context.States.Add(new StateEntity
+                {
+                    Name = "Sin Iniciar",
+                });
+                _context.States.Add(new StateEntity
+                {
+                    Name = "Iniciado",
+                });
+                _context.States.Add(new StateEntity
+                {
+                    Name = "Pendiente",
+                });
+                _context.States.Add(new StateEntity
+                {
+                    Name = "Terminado",
+                });
             };
             await _context.SaveChangesAsync();
         }

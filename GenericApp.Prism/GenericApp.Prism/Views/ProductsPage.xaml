@@ -24,16 +24,25 @@
                      Padding="5">
       <SearchBar Placeholder="Buscar Producto..."
                        SearchCommand="{Binding SearchCommand}"
+                       BackgroundColor="White"
                        Text="{Binding Search}"/>
       <CollectionView ItemsSource="{Binding Products}">
         <CollectionView.ItemsLayout>
-          <GridItemsLayout Orientation="Vertical"/>
+          <LinearItemsLayout Orientation="Vertical"
+                           ItemSpacing="5" />
         </CollectionView.ItemsLayout>
         <CollectionView.ItemTemplate>
+          
           <DataTemplate>
-            <Grid>
+            <Frame CornerRadius="10"
+                     HasShadow="True"
+                     BackgroundColor="White"
+                     Margin="5"
+                     Padding="5"
+                     >
+              <Grid>
               <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SelectProductCommand}"/>
+                <TapGestureRecognizer Command="{Binding ViewProductCommand}"/>
               </Grid.GestureRecognizers>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -83,9 +92,22 @@
                                       FontAttributes="Italic" 
                                       VerticalOptions="End" />
               </StackLayout>
-              <Image Grid.Column="2" 
-                                   Source="ic_more_vert"/>
-            </Grid>
+
+                <StackLayout Grid.Column="2">
+                  <ImageButton 
+                    BackgroundColor="Transparent"
+                    VerticalOptions="CenterAndExpand"                     
+                    Command="{Binding EditProductCommand}" 
+                    Source="ic_action_edit.png"/>
+                  <ImageButton 
+                    BackgroundColor="Transparent"
+                    VerticalOptions="CenterAndExpand"                     
+                    Command="{Binding DeleteProductCommand}" 
+                    Source="ic_action_delete_forever.png"/>
+                </StackLayout>
+
+              </Grid>
+            </Frame>
           </DataTemplate>
         </CollectionView.ItemTemplate>
       </CollectionView>

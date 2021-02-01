@@ -11,6 +11,7 @@ using System;
 using GenericApp.Common.Helpers;
 using GenericApp.Web.Helpers;
 using GenericApp.Web.Models;
+using GenericApp.Common.Responses;
 
 namespace GenericApp.Web.Controllers.API
 {
@@ -38,9 +39,9 @@ namespace GenericApp.Web.Controllers.API
                 .Include(c => c.Category)
                 .Include(p => p.ProductImages)
                 .Include(s => s.State)
-                .Where(p => p.IsActive)
                 .ToListAsync();
-            return Ok(products);
+
+            return Ok(_converterHelper.ToProductResponse(products));
         }
 
         // POST: api/Products
@@ -91,18 +92,7 @@ namespace GenericApp.Web.Controllers.API
             _context.Products.Add(Product);
             await _context.SaveChangesAsync();
 
-            ProductViewModel newProduct= _converterHelper.ToProductViewModel(Product);
-
-            //if (imageUrl!= string.Empty)
-            //{
-            //    var ProductImage = new ProductImageEntity
-            //    {
-            //        Id = newProduct.Id,
-            //        ImagePath = imageUrl,
-            //    };
-            //    _context.ProductImages.Add(ProductImage);
-            //    await _context.SaveChangesAsync();
-            //}
+            ProductResponse newProduct= _converterHelper.ToProductResponse(Product);
 
             return Ok(newProduct);
         }

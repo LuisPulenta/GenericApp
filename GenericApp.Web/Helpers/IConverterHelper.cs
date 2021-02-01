@@ -1,5 +1,7 @@
-﻿using GenericApp.Web.Data.Entities;
+﻿using GenericApp.Common.Responses;
+using GenericApp.Web.Data.Entities;
 using GenericApp.Web.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GenericApp.Web.Helpers
@@ -21,5 +23,9 @@ namespace GenericApp.Web.Helpers
         TeamEntity ToTeamEntity(TeamViewModel model, string path,bool isNew);
 
         TeamViewModel ToTeamViewModel(TeamEntity product);
+
+        ProductResponse ToProductResponse(ProductEntity productEntity);
+
+        List<ProductResponse> ToProductResponse(List<ProductEntity> productEntities);
     }
 }

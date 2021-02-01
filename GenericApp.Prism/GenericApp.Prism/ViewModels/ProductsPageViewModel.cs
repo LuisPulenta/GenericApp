@@ -100,7 +100,7 @@ namespace GenericApp.Prism.ViewModels
             IsRefreshing = true;
             if (string.IsNullOrEmpty(Search))
             {
-                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p => new ProductItemViewModel(_navigationService)
+                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p => new ProductItemViewModel(_navigationService,_apiService)
                 {
                     Category = p.Category,
                     Description = p.Description,
@@ -118,7 +118,7 @@ namespace GenericApp.Prism.ViewModels
             }
             else
             {
-                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p => new ProductItemViewModel(_navigationService)
+                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p => new ProductItemViewModel(_navigationService,_apiService)
                 {
                     Category = p.Category,
                     Description = p.Description,
